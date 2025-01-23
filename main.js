@@ -40,6 +40,13 @@ class ChessBoard {
     }
 
     movePiece(piece, targetSquare) {
+        const capturedPiece = targetSquare.querySelector('.piece');
+
+        if (capturedPiece) {
+            // Remove the captured piece from the target square
+            capturedPiece.remove();
+        }
+        
         targetSquare.appendChild(piece);
     }
 
@@ -47,15 +54,30 @@ class ChessBoard {
         const currentSquare = piece.parentElement;
         const currentIndex = this.board.indexOf(currentSquare);
         const targetIndex = this.board.indexOf(targetSquare);
-
+    
         const pieceColor = piece.getAttribute('color');
         const direction = pieceColor === 'white' ? -1 : 1;
-
-        // Allow movement per one square forward -- More is to be implemented in time.
-        return (
-            targetIndex === currentIndex + 8 * direction &&
-            !targetSquare.querySelector('.piece')
-        );
+    
+        // Calculate diagonal target squares for capturing
+        const leftDiagonal = currentIndex + (8 * direction - 1);
+        const rightDiagonal = currentIndex + (8 * direction + 1);
+    
+        // Check if the move is a one-step forward move
+        if (targetIndex === currentIndex + 8 * direction && !targetSquare.querySelector('.piece')) {
+            return true;
+        }
+    
+        // Check if the move is a diagonal capture
+        if (
+            (targetIndex === leftDiagonal || targetIndex === rightDiagonal) &&
+            targetSquare.querySelector('.piece') &&
+            targetSquare.querySelector('.piece').getAttribute('color') !== pieceColor
+        ) {
+            return true;
+        }
+    
+        // Otherwise, the move is invalid
+        return false;
     }
 }
 
