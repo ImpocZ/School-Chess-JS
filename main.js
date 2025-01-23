@@ -1,7 +1,7 @@
 class ChessBoard {
     constructor() {
         // Make the board via class
-        this.board = Array.from(document.querySelectorAll('.square')); 
+        this.board = Array.from(document.querySelectorAll('.chessBoard .square'));
         this.selectedPiece = null;
         this.startup();
     }
@@ -46,7 +46,7 @@ class ChessBoard {
             // Remove the captured piece from the target square
             capturedPiece.remove();
         }
-        
+
         targetSquare.appendChild(piece);
     }
 
